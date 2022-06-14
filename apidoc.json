@@ -1,0 +1,13 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "description": "node-server项目API文档",
+  "title": "node-server API",
+  "url": "http://localhost:3000/api",
+  "sampleUrl": false,
+  "forceLanguage": "zh-cn",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  }
+}
