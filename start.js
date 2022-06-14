@@ -26,7 +26,6 @@ svc.on('install', function () {
     svc.start();
 });
 svc.on("start", function () {
-    console.log(process.env.NODE_ENV)
     console.log('server start')
 });
 svc.on("stop", function () {
