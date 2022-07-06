@@ -30,6 +30,7 @@ svc.on("start", function () {
 });
 svc.on("stop", function () {
     console.log('server stop')
+    svc.start();
 });
 svc.on("error", function (e) {
     console.log('server fail：' + e)
@@ -38,5 +39,5 @@ svc.on("error", function (e) {
 if (!svc.exists) {
     svc.install();
 } else {
-    svc.restart()
+    svc.stop()
 }
