@@ -8,7 +8,7 @@ log4js.configure({
             filename: 'logs/log',
             pattern: "yyyy-MM-dd.log",
             maxLogSize: 1024 * 1000,
-            backups: 3,
+            backups: 180,
             alwaysIncludePattern: true,
 
         },
