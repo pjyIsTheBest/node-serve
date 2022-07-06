@@ -1,9 +1,10 @@
 /**数据库配置 连接池 */
 const mysql = require("mysql");
-const { logSql } = require("./log4")
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
+const { logSql,logError } = require("./log4")
+const { DB_HOST, DB_PORT,DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 const pool = mysql.createPool({
     host: DB_HOST,
+    port:DB_PORT,
     user: DB_USER,
     password: DB_PASSWORD,
     database: DB_DATABASE,
@@ -33,6 +34,7 @@ const query = (sql, val) => {
         pool.query(sql, val, function (error, results, fields) {
             if (error) {
                 reject(error)
+                logError(error)
                 throw Error(error);
             } else {
                 resolve(results)
