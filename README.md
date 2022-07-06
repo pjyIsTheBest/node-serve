@@ -3,7 +3,7 @@
 ### 介绍
 node+express+node-mysql搭建的服务端,搭配前端项目，完成了一个管理系统模板，实现的登录鉴权，新建路由，添加用户，添加角色和分配路由的基本功能
 ## 线上体验地址 
-http://42.192.11.55:8081/
+http://42.192.11.55/
 
 ## 前端项目仓库
 https://gitee.com/peng-jiangyong/admin-template
