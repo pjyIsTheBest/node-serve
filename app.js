@@ -1,3 +1,7 @@
+//注入环境变量
+const dotenv = require("dotenv")
+dotenv.config({ path: `./.env.${process.env.NODE_ENV}` })
+
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
@@ -5,9 +9,6 @@ const bodyParser = require('body-parser');
 const { originWhiteList } = require('./config/index')
 const api = require("./api/index");
 const { log } = require("./config/log4")
-//注入环境变量
-const dotenv = require("dotenv")
-dotenv.config({ path: `./.env.${process.env.NODE_ENV}` })
 
 app.all('*', function (req, res, next) {
     //白名单
