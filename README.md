@@ -3,13 +3,13 @@
 ### 介绍
 node+express+node-mysql搭建的服务端,搭配前端项目，完成了一个管理系统模板，实现的登录鉴权，新建路由，添加用户，添加角色和分配路由的基本功能
 ## 线上体验地址 
-http://www.pjy.cool/
+https://www.pjy.cool/
 
 ## 前端项目仓库
 https://gitee.com/peng-jiangyong/admin-template
 
 ## 接口文档
-http://serve.pjy.cool/apidoc
+https://serve.pjy.cool/apidoc
 
 # 项目文件说明
 - `api` 业务api接口
