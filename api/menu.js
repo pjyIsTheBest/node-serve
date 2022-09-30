@@ -132,6 +132,143 @@ router.get("/findByUser", tokenValidate, async (req, res) => {
     }
 })
 /**
+ * @api {get} /menu/findByUserAndParentId 根据用户权限和父节点id查询对应子节点
+ * @apiVersion 1.0.0
+ * @apiName 根据用户权限和父节点id查询对应子节点
+ * @apiGroup menu
+ * @apiQuery {Int} parentId 父节点id
+ * @apiSuccess {Number} code 200
+ * @apiSuccess {Object} data 菜单信息
+ * @apiSuccessExample {json} Success-Response:
+ */
+router.get("/findByUserAndParentId", tokenValidate, async (req, res) => {
+    let { userInfo } = req.body
+    let { parentId = 0 } = req.query;//默认查询根节点
+    try {
+        if (!userInfo.role) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '当前账号未绑定角色'
+            })
+            return;
+        }
+        let [role] = await query(`
+        SELECT id,menuIds,status FROM role WHERE id=:id
+       `,
+            { id: userInfo.role })
+        if (!role) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '绑定角色不存在'
+            })
+            return;
+        }
+        if (role && role.status == '02') {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '绑定角色已被禁用'
+            })
+            return;
+        }
+        let menuIds = role.menuIds ? role.menuIds.split(",") : [];
+        let menus = await query(`
+            SELECT * FROM menu WHERE id IN (:menuIds) AND parentId=:parentId
+        `,
+            { menuIds, parentId })
+        res.json({
+            code: 200,
+            data: menus,
+            msg: '查询成功'
+        })
+
+    } catch (error) {
+        logError(error)
+        res.json({
+            code: 500,
+            msg: '出错啦',
+            data: null
+        })
+    }
+})
+/**
+ *  @api {get} /menu/findAllByUserAndParentId
+ * @apiVersion 1.0.0
+ * @apiName 根据父节点id查询所有对应子节点
+ * @apiGroup menu
+ * @apiQuery {Int} parentId 父节点id
+ * @apiSuccess {Number} code 200
+ * @apiSuccess {Object} data 菜单信息
+ * @apiSuccessExample {json} Success-Response:
+ */
+router.get("/findAllByUserAndParentId", tokenValidate, async (req, res) => {
+    let { userInfo } = req.body
+    let { parentId = 0 } = req.query;//默认查询根节点
+    try {
+        if (!userInfo.role) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '当前账号未绑定角色'
+            })
+            return;
+        }
+        let [role] = await query(`
+        SELECT id,menuIds,status FROM role WHERE id=:id
+       `,
+            { id: userInfo.role })
+        if (!role) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '绑定角色不存在'
+            })
+            return;
+        }
+        if (role && role.status == '02') {
+            res.json({
+                code: 500,
+                data: null,
+                msg: '绑定角色已被禁用'
+            })
+            return;
+        }
+        let menuIds = role.menuIds ? role.menuIds.split(",") : [];
+        let menus = await query(`
+        SELECT * FROM menu WHERE id IN (:menuIds)
+        `,
+            { menuIds })
+        let arr = [];
+        function test(id) {
+            let a = [...menus].filter(i => i.parentId == id);
+
+            if (a.length > 0) {
+                a.forEach(e => {
+                    arr.push(e);
+                    test(e.id)
+                })
+            }
+
+        }
+        test(parentId)
+        res.json({
+            code: 200,
+            data: arr,
+            msg: '查询成功'
+        })
+
+    } catch (error) {
+        logError(error)
+        res.json({
+            code: 500,
+            msg: '出错啦',
+            data: null
+        })
+    }
+})
+/**
  * 
  * @api {get} /menu/findByParentId 根据父节点id查询对应子节点
  * @apiVersion 1.0.0
