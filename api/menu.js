@@ -137,9 +137,6 @@ router.get("/findByUser", tokenValidate, async (req, res) => {
  * @apiName 根据用户权限和父节点id查询对应子节点
  * @apiGroup menu
  * @apiQuery {Int} parentId 父节点id
- * @apiSuccess {Number} code 200
- * @apiSuccess {Object} data 菜单信息
- * @apiSuccessExample {json} Success-Response:
  */
 router.get("/findByUserAndParentId", tokenValidate, async (req, res) => {
     let { userInfo } = req.body
@@ -199,9 +196,6 @@ router.get("/findByUserAndParentId", tokenValidate, async (req, res) => {
  * @apiName 根据父节点id查询所有对应子节点
  * @apiGroup menu
  * @apiQuery {Int} parentId 父节点id
- * @apiSuccess {Number} code 200
- * @apiSuccess {Object} data 菜单信息
- * @apiSuccessExample {json} Success-Response:
  */
 router.get("/findAllByUserAndParentId", tokenValidate, async (req, res) => {
     let { userInfo } = req.body
