@@ -4,7 +4,7 @@ const { logError } = require("../config/log4")
 // openAi
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-    apiKey: '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',
+    apiKey: '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',
 });
 const openai = new OpenAIApi(configuration);
 
