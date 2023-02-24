@@ -10,6 +10,13 @@ const { originWhiteList } = require('./config/index')
 const api = require("./api/index");
 const { log } = require("./config/log4")
 
+// openAi
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+    apiKey: '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',
+});
+const openai = new OpenAIApi(configuration);
+
 app.all('*', function (req, res, next) {
     //白名单
     if (originWhiteList.includes(req.headers.origin)) {
@@ -48,3 +55,20 @@ api(app)
 app.listen(process.env.PORT, () => {
     console.log(`服务已启动，端口号：${process.env.PORT}`);
 });
+
+app.post('/chat',(req, res) => {
+    const {title} = req.body
+    openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: title,
+        temperature: 0,
+        max_tokens: 2999,
+        top_p: 1,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+        stop: ["{}"],
+    }).then(data => {
+        console.log(data.data.choices);
+        res.json({code: 200, data: data.data})
+    });
+})
