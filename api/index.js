@@ -3,6 +3,7 @@ const { logInput } = require("../config/log4")
 const user = require('./user.js')
 const role = require("./role")
 const menu = require("./menu")
+const openAi = require("./openAi.js")
 module.exports = (app) => {
     app
         .use((req, res, next) => {
@@ -12,4 +13,5 @@ module.exports = (app) => {
         .use('/api/user', user)
         .use('/api/role', role)
         .use("/api/menu", menu)
+        .use("/api/openAi", openAi)
 }
