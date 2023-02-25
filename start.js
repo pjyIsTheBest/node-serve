@@ -30,7 +30,6 @@ svc.on("start", function () {
 });
 svc.on("stop", function () {
     console.log('server stop')
-    svc.start();
 });
 svc.on("error", function (e) {
     console.log('server fail：' + e)
