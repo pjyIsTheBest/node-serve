@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { logError } = require("../config/log4")
+const { log,logError } = require("../config/log4")
 // openAi
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
@@ -22,6 +22,7 @@ router.post("/chat", async (req, res) => {
             stop: ["{}"],
         })
         console.log(data);
+        log(data)
         res.json({code: 200, data: data})
     } catch (error) {
         logError(error)
