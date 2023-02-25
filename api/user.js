@@ -511,4 +511,18 @@ router.post("/chat", async (req, res) => {
         })
     }
 })
+router.post("/chat1", async (req, res) => {
+    try {
+        const {title} = req.body
+
+        res.json({code: 200, data: title})
+    } catch (error) {
+        logError(error)
+        res.json({
+            code: 500,
+            msg: '出错啦',
+            data: null
+        })
+    }
+})
 module.exports = router
