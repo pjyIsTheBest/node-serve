@@ -4,7 +4,7 @@ const { logError } = require("../config/log4")
 // openAi
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-    apiKey: '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',
+    apiKey: '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',
 });
 const openai = new OpenAIApi(configuration);
 
@@ -23,6 +23,21 @@ router.post("/chat", async (req, res) => {
         })
         console.log(data);
         res.json({code: 200, data: data})
+    } catch (error) {
+        logError(error)
+        res.json({
+            code: 500,
+            msg: '出错啦',
+            data: null
+        })
+    }
+})
+
+router.post("/chat1", async (req, res) => {
+    try {
+        const {title} = req.body
+
+        res.json({code: 200, data: title})
     } catch (error) {
         logError(error)
         res.json({
