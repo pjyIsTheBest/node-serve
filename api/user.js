@@ -6,7 +6,7 @@ const { md5, createToken } = require("../util/index")
 const tokenValidate = require("../util/tokenValidate")
 const { logInput, logOutput, logError } = require("../config/log4")
 /**
- * 
+ *
  * @api {post} /user/login 登录
  * @apiVersion 1.0.0
  * @apiName 登录
@@ -25,10 +25,10 @@ const { logInput, logOutput, logError } = require("../config/log4")
  *    account:"",
  *    role:'',
  *    status:'',
- * 
+ *
  *  }
  * }
- * 
+ *
  */
 router.post("/login", async (req, res) => {
     const { account, password } = req.body;
@@ -126,7 +126,7 @@ router.post("/login", async (req, res) => {
 })
 
 /**
- * 
+ *
  * @api {get} /user/find 查询用户列表
  * @apiVersion 1.0.0
  * @apiName 查询用户列表
@@ -155,7 +155,7 @@ router.post("/login", async (req, res) => {
  *  },
  *  total:1
  * }
- * 
+ *
  */
 router.get('/find', tokenValidate, async (req, res) => {
     let { account, name, phone, pageIndex = 1, pageSize = 20 } = req.query;
@@ -196,7 +196,7 @@ router.get('/find', tokenValidate, async (req, res) => {
     }
 })
 /**
- * 
+ *
  * @api {post} /user/add 新增用户
  * @apiVersion 1.0.0
  * @apiName 新增用户
@@ -215,7 +215,7 @@ router.get('/find', tokenValidate, async (req, res) => {
  *  code: 200,
  *  data: null
  * }
- * 
+ *
  */
 router.post("/add", tokenValidate, async (req, res) => {
     const { account, password, name, phone, role, remarks } = req.body;
@@ -260,7 +260,7 @@ router.post("/add", tokenValidate, async (req, res) => {
     }
 })
 /**
- * 
+ *
  * @api {post} /user/update 修改用户
  * @apiVersion 1.0.0
  * @apiName 修改用户
@@ -279,7 +279,7 @@ router.post("/add", tokenValidate, async (req, res) => {
  *  code: 200,
  *  data: null
  * }
- * 
+ *
  */
 router.post('/update', tokenValidate, async (req, res) => {
     const { id, account, name, phone, role, remarks } = req.body;
@@ -313,7 +313,7 @@ router.post('/update', tokenValidate, async (req, res) => {
     }
 })
 /**
- * 
+ *
  * @api {post} /user/update 删除用户
  * @apiVersion 1.0.0
  * @apiName 删除用户
@@ -327,7 +327,7 @@ router.post('/update', tokenValidate, async (req, res) => {
  *  code: 200,
  *  data: null
  * }
- * 
+ *
  */
 router.post('/delete', tokenValidate, async (req, res) => {
     let { id } = req.body;
@@ -359,7 +359,7 @@ router.post('/delete', tokenValidate, async (req, res) => {
     }
 })
 /**
- * 
+ *
  * @api {post} /user/updateStatus 禁用 锁定、解锁
  * @apiVersion 1.0.0
  * @apiName 禁用 锁定、解锁
@@ -374,7 +374,7 @@ router.post('/delete', tokenValidate, async (req, res) => {
  *  code: 200,
  *  data: null
  * }
- * 
+ *
  */
 router.post("/updateStatus", tokenValidate, async (req, res) => {
     let { id, status } = req.body;
@@ -426,7 +426,7 @@ router.post("/updateStatus", tokenValidate, async (req, res) => {
     }
 })
 /**
- * 
+ *
  * @api {post} /user/changePwd 修改密码
  * @apiVersion 1.0.0
  * @apiName 修改密码
@@ -441,7 +441,7 @@ router.post("/updateStatus", tokenValidate, async (req, res) => {
  *  code: 200,
  *  data: null
  * }
- * 
+ *
  */
 router.post("/changePwd", tokenValidate, async (req, res) => {
     let { oldPwd, newPwd, userInfo } = req.body;
@@ -480,49 +480,5 @@ router.post("/changePwd", tokenValidate, async (req, res) => {
         })
     }
 })
-// openAi
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-    apiKey: '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',
-});
-const openai = new OpenAIApi(configuration);
 
-router.post("/chat", async (req, res) => {
-    try {
-        const {title} = req.body
-        const {data} = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: title,
-            temperature: 0,
-            max_tokens: 2999,
-            top_p: 1,
-            frequency_penalty: 0.0,
-            presence_penalty: 0.0,
-            stop: ["{}"],
-        })
-        console.log(data);
-        res.json({code: 200, data: data})
-    } catch (error) {
-        logError(error)
-        res.json({
-            code: 500,
-            msg: '出错啦',
-            data: null
-        })
-    }
-})
-router.post("/chat1", async (req, res) => {
-    try {
-        const {title} = req.body
-
-        res.json({code: 200, data: title})
-    } catch (error) {
-        logError(error)
-        res.json({
-            code: 500,
-            msg: '出错啦',
-            data: null
-        })
-    }
-})
 module.exports = router
