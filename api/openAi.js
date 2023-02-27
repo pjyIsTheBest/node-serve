@@ -4,7 +4,7 @@ const { log,logError } = require("../config/log4")
 // openAi
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-    apiKey: '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',
+    apiKey: process.env.OPEN_AI_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -21,7 +21,6 @@ router.post("/chat", async (req, res) => {
             presence_penalty: 0.0,
             stop: ["{}"],
         })
-        console.log(data);
         log(data)
         res.json({code: 200, data: data})
     } catch (error) {
@@ -34,7 +33,7 @@ router.post("/chat", async (req, res) => {
     }
 })
 
-router.post("/chat1", async (req, res) => {
+router.post("/chat2", async (req, res) => {
     try {
         const {title} = req.body
 
