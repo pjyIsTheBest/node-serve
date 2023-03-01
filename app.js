@@ -14,11 +14,11 @@ const { log } = require("./config/log4")
 
 app.all('*', function (req, res, next) {
     //白名单
-   // if (originWhiteList.includes(req.headers.origin)) {
+    if (originWhiteList.includes(req.headers.origin)) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length,Authorization, Accept, X-Requested-With,x-custom-header');
         res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-   // }
+    }
 
     if (req.method == 'OPTIONS') {
         res.sendStatus(200);
