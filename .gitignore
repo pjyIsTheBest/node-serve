@@ -9,3 +9,5 @@ static/*
 dist-ssr
 *.local
 .env.*
+package-lock.json
+yarn.lock
