@@ -38,7 +38,7 @@ node + mysql
 
 ## windows服务器部署
 
-node start
+pm2
 
 
 
