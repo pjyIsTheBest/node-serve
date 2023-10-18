@@ -46,7 +46,7 @@ log4js.configure({
         },
     }
 })
-const log = (...data) => {
+const log = (data) => {
     if (process.env.NODE_ENV == 'production') {
         let logger = log4js.getLogger();
         logger.info(data)
@@ -56,7 +56,7 @@ const log = (...data) => {
 
 
 }
-const logSql = (...data) => {
+const logSql = (data) => {
     if (process.env.NODE_ENV == 'production') {
         let logger = log4js.getLogger('sql');
         logger.info(data)
@@ -65,7 +65,7 @@ const logSql = (...data) => {
     }
 
 }
-const logInput = (...data) => {
+const logInput = (data) => {
     if (process.env.NODE_ENV == 'production') {
         let logger = log4js.getLogger('input');
         logger.info(data)
@@ -74,7 +74,7 @@ const logInput = (...data) => {
     }
 
 }
-const logOutput = (...data) => {
+const logOutput = (data) => {
     if (process.env.NODE_ENV == 'production') {
         let logger = log4js.getLogger('sql');
         logger.info(data)
@@ -83,7 +83,7 @@ const logOutput = (...data) => {
     }
 
 }
-const logError = (...data) => {
+const logError = (data) => {
     if (process.env.NODE_ENV == 'production') {
         let logger = log4js.getLogger('error');
         logger.error(data)
@@ -93,5 +93,9 @@ const logError = (...data) => {
 
 }
 module.exports = {
-    log, logSql, logInput, logOutput, logError
+    log,
+    logSql,
+    logInput,
+    logOutput,
+    logError
 }
