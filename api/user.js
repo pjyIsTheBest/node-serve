@@ -70,6 +70,7 @@ router.post("/login", async(req, res) => {
         let [user] = await query(`SELECT * FROM user WHERE account=:account`, {
             account,
         });
+        log(user);
         if (!user) {
             res.json({
                 code: 500,
@@ -134,8 +135,7 @@ router.post("/login", async(req, res) => {
                 code: 500,
                 data: null,
                 msg: limit <= 0 ?
-                    "您的账号已被锁定，请联系管理员！" :
-                    `密码错误，您还有${limit}次机会重新输入！`,
+                    "您的账号已被锁定，请联系管理员！" : `密码错误，您还有${limit}次机会重新输入！`,
             });
         }
     } catch (error) {
