@@ -28,6 +28,7 @@ app.all('*', function(req, res, next) {
         res.sendStatus(200);
         return
     }
+    console.log(req.headers)
     log(`ip来源: ${req.ip} origin ${req.headers.origin}`)
     next();
 });
