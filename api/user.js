@@ -38,7 +38,7 @@ router.get("/test", (req, res) => {
     });
 });
 router.post("/login", async(req, res) => {
-    log(req.body)
+    log(req.body);
     const { account, password } = req.body;
 
     if (!account) {
@@ -108,6 +108,7 @@ router.post("/login", async(req, res) => {
                     id: user.id,
                 }
             );
+            log(data);
             res.json({
                 code: 200,
                 data: {
@@ -123,16 +124,18 @@ router.post("/login", async(req, res) => {
             let limit = user.limit - 1;
             let status = limit <= 0 ? "02" : "01";
 
-            await query(
+            let data = await query(
                 `UPDATE user SET ${pool.escapeId(
           "limit"
         )}=:limit,status=:status WHERE id=:id`, { limit, status, id: user.id }
             );
+            log(data);
             res.json({
                 code: 500,
                 data: null,
                 msg: limit <= 0 ?
-                    "您的账号已被锁定，请联系管理员！" : `密码错误，您还有${limit}次机会重新输入！`,
+                    "您的账号已被锁定，请联系管理员！" :
+                    `密码错误，您还有${limit}次机会重新输入！`,
             });
         }
     } catch (error) {
