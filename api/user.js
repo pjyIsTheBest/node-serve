@@ -64,11 +64,7 @@ router.post("/login", async(req, res) => {
         });
         return;
     }
-    res.json({
-        code: 200,
-        msg: "哈哈哈哈",
-        data: null,
-    });
+
     try {
         let [user] = await query(`SELECT * FROM user WHERE account=:account`, {
             account,
