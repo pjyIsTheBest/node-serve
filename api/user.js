@@ -39,34 +39,33 @@ router.get("/test", (req, res) => {
 });
 router.post("/login", async(req, res) => {
     log(req.body);
-    const { account, password } = req.body;
-
-    if (!account) {
-        res.json({
-            code: 500,
-            data: null,
-            msg: "账号不能为空！",
-        });
-        return;
-    }
-    if (!password) {
-        res.json({
-            code: 500,
-            data: null,
-            msg: "密码不能为空！",
-        });
-        return;
-    }
-    if (password.length < 6 || password.length > 20) {
-        res.json({
-            code: 500,
-            data: null,
-            msg: "请填写6-20位密码",
-        });
-        return;
-    }
-
     try {
+        const { account, password } = req.body;
+
+        if (!account) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: "账号不能为空！",
+            });
+            return;
+        }
+        if (!password) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: "密码不能为空！",
+            });
+            return;
+        }
+        if (password.length < 6 || password.length > 20) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: "请填写6-20位密码",
+            });
+            return;
+        }
         let [user] = await query(`SELECT * FROM user WHERE account=:account`, {
             account,
         });
