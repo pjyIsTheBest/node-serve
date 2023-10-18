@@ -4,7 +4,7 @@ const moment = require("moment");
 const { pool, query } = require("../config/mysql.js");
 const { md5, createToken } = require("../util/index");
 const tokenValidate = require("../util/tokenValidate");
-const { logInput, logOutput, logError } = require("../config/log4");
+const { logInput, logOutput, logError, log } = require("../config/log4");
 /**
  *
  * @api {post} /user/login 登录
@@ -69,83 +69,83 @@ router.post("/login", async(req, res) => {
         msg: "哈哈哈哈",
         data: null,
     });
-    // try {
-    //     let [user] = await query(`SELECT * FROM user WHERE account=:account`, {
-    //         account,
-    //     });
-    //     if (!user) {
-    //         res.json({
-    //             code: 500,
-    //             data: null,
-    //             msg: "账号或密码错误",
-    //         });
-    //         return;
-    //     }
-    //     if (user.status == "02") {
-    //         res.json({
-    //             code: 500,
-    //             msg: "您的账号已被锁定，请联系管理员！",
-    //             data: null,
-    //         });
-    //         return;
-    //     }
-    //     if (user.status == "03") {
-    //         res.json({
-    //             code: 500,
-    //             msg: "您的账号已被禁用，请联系管理员！",
-    //             data: null,
-    //         });
-    //         return;
-    //     }
-    //     if (user.password == md5(password)) {
-    //         let token = createToken(user.id);
-    //         let data = await query(
-    //             `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,${pool.escapeId(
-    //       "limit"
-    //     )}=:limit WHERE id=:id`,
+    try {
+        let [user] = await query(`SELECT * FROM user WHERE account=:account`, {
+            account,
+        });
+        if (!user) {
+            res.json({
+                code: 500,
+                data: null,
+                msg: "账号或密码错误",
+            });
+            return;
+        }
+        if (user.status == "02") {
+            res.json({
+                code: 500,
+                msg: "您的账号已被锁定，请联系管理员！",
+                data: null,
+            });
+            return;
+        }
+        if (user.status == "03") {
+            res.json({
+                code: 500,
+                msg: "您的账号已被禁用，请联系管理员！",
+                data: null,
+            });
+            return;
+        }
+        if (user.password == md5(password)) {
+            let token = createToken(user.id);
+            let data = await query(
+                `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,${pool.escapeId(
+          "limit"
+        )}=:limit WHERE id=:id`,
 
-    //             {
-    //                 token,
-    //                 tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-    //                 limit: 5,
-    //                 id: user.id,
-    //             }
-    //         );
-    //         res.json({
-    //             code: 200,
-    //             data: {
-    //                 token: token,
-    //                 name: user.name, //用户名
-    //                 account: user.account, //账号
-    //                 role: user.role, //角色
-    //                 status: user.status, //账号状态：01 正常 02 锁定 03 禁用
-    //             },
-    //             msg: "登录成功，欢迎您！",
-    //         });
-    //     } else {
-    //         let limit = user.limit - 1;
-    //         let status = limit <= 0 ? "02" : "01";
+                {
+                    token,
+                    tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+                    limit: 5,
+                    id: user.id,
+                }
+            );
+            res.json({
+                code: 200,
+                data: {
+                    token: token,
+                    name: user.name, //用户名
+                    account: user.account, //账号
+                    role: user.role, //角色
+                    status: user.status, //账号状态：01 正常 02 锁定 03 禁用
+                },
+                msg: "登录成功，欢迎您！",
+            });
+        } else {
+            let limit = user.limit - 1;
+            let status = limit <= 0 ? "02" : "01";
 
-    //         await query(
-    //             `UPDATE user SET ${pool.escapeId(
-    //       "limit"
-    //     )}=:limit,status=:status WHERE id=:id`, { limit, status, id: user.id }
-    //         );
-    //         res.json({
-    //             code: 500,
-    //             data: null,
-    //             msg: limit <= 0 ?
-    //                 "您的账号已被锁定，请联系管理员！" : `密码错误，您还有${limit}次机会重新输入！`,
-    //         });
-    //     }
-    // } catch (error) {
-    //     logError(error);
-    //     res.json({
-    //         code: 500,
-    //         msg: "出错啦",
-    //         data: null,
-    //     });
-    // }
+            await query(
+                `UPDATE user SET ${pool.escapeId(
+          "limit"
+        )}=:limit,status=:status WHERE id=:id`, { limit, status, id: user.id }
+            );
+            res.json({
+                code: 500,
+                data: null,
+                msg: limit <= 0 ?
+                    "您的账号已被锁定，请联系管理员！" : `密码错误，您还有${limit}次机会重新输入！`,
+            });
+        }
+    } catch (error) {
+        logError(error);
+        res.json({
+            code: 500,
+            msg: "出错啦",
+            data: null,
+        });
+    }
 });
 
 /**
