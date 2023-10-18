@@ -38,6 +38,7 @@ router.get("/test", (req, res) => {
     });
 });
 router.post("/login", async(req, res) => {
+    log(req.body)
     const { account, password } = req.body;
 
     if (!account) {

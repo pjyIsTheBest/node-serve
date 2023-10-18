@@ -7,7 +7,7 @@ const openAi = require("./openAi.js")
 module.exports = (app) => {
     app
         .use((req, res, next) => {
-            // logInput(`method: ${req.method} url: ${req.url}`)
+            logInput(`method: ${req.method} url: ${req.url}`)
             next()
         })
         .use('/api/user', user)
