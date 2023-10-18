@@ -28,7 +28,7 @@ app.all('*', function(req, res, next) {
         res.sendStatus(200);
         return
     }
-    log(` ip来源: ${req.ip} origin ${req.headers.origin}`)
+    log(`ip来源: ${req.ip} origin ${req.headers.origin}`)
     next();
 });
 app.use('/static', express.static('static'));
