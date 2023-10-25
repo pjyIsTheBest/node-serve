@@ -24,7 +24,7 @@ router.get("/getCode", async(req, res) => {
 
             let sessionkey = encrypt(String(insertId))
             redis.set(`sessionkey${insertId}`, sessionkey, 'ex', 5 * 60) //5分钟有效
-            let fileName = await getWxCode("pages/index/index", sessionkey);
+            let fileName = await getWxCode("pages/auth/index", sessionkey);
             res.json({
                 code: 200,
                 data: {
