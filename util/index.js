@@ -5,11 +5,11 @@ module.exports = {
     createToken: (str, times) => { //接受一个字符串和一个过期时间
         times = times || 30 * 60 * 1000;
         const jsonData = {
-            data: str,
-            timeout: times,
-            createAt: Date.now()
-        }
-        //格式转成base64
+                data: str,
+                timeout: times,
+                createAt: Date.now()
+            }
+            //格式转成base64
         let base64Str = Buffer.from(JSON.stringify(jsonData), "utf8").toString("base64");
         //添加签名，防篡改        
         let hash = crypto.createHmac('sha256', idiograph);
@@ -30,7 +30,6 @@ module.exports = {
         try {
             //将第一段密文解析
             let res = JSON.parse(Buffer.from(decArr[0], "base64").toString("utf8"));
-
             //检验签名                
             let hash = crypto.createHmac('sha256', idiograph);
             hash.update(decArr[0]);
@@ -46,7 +45,7 @@ module.exports = {
         }
 
     },
-    md5: function (str) { //字符串加密
+    md5: function(str) { //字符串加密
         let md5 = crypto.createHash('md5');
         return md5.update(str).digest('hex');
     },
@@ -59,7 +58,7 @@ module.exports = {
             "H+": date.getHours().toString(), // 时
             "M+": date.getMinutes().toString(), // 分
             "S+": date.getSeconds().toString() // 秒
-            // 有其他格式化字符需求可以继续添加，必须转化成字符串
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
         };
         for (let k in opt) {
             ret = new RegExp("(" + k + ")").exec(fmt);
@@ -69,7 +68,7 @@ module.exports = {
         };
         return fmt;
     },
-    getIp: function (req) {
+    getIp: function(req) {
         var ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddres || req.socket.remoteAddress || '';
         if (ip.split(',').length > 0) {
             ip = ip.split(',')[0];

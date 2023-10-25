@@ -9,9 +9,6 @@ const bodyParser = require('body-parser');
 const { originWhiteList } = require('./config/index')
 const api = require("./api/index");
 const { log } = require("./config/log4")
-
-
-
 app.all('*', function(req, res, next) {
     //白名单
     // if (originWhiteList.includes(req.headers.origin)) {
@@ -28,7 +25,6 @@ app.all('*', function(req, res, next) {
         res.sendStatus(200);
         return
     }
-    console.log(req.headers)
     log(`ip来源: ${req.ip} origin ${req.headers.origin}`)
     next();
 });
