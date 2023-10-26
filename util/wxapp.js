@@ -46,7 +46,6 @@ const getWxCode = async(page, scene) => {
             check_path: false,
             env_version: "release"
         }
-        console.log(data)
         let access_token = await getAccessToken();
         return new Promise((resolve, reject) => {
 
@@ -60,14 +59,12 @@ const getWxCode = async(page, scene) => {
             }, function(error, response, body) {
 
                 if (!error && response.statusCode == 200) {
-                    console.log(error)
                     const { errcode, errmsg } = body;
                     if (errcode) {
                         reject({ errcode, errmsg })
                     } else {
                         let fileName = `wxcode-${new Date().getTime()}.png`
                         fs.writeFile(path.join(__dirname, '../', `static/${fileName}`), body, 'binary', (err) => {
-                            console.log(err)
                             if (!err) {
                                 resolve(fileName)
                             } else {
@@ -89,7 +86,6 @@ const getOpenID = async(code) => {
         request.get({
             url: `https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&appid=${WX_APP_ID}&secret=${WX_APP_SECRET}&js_code=${code}`,
         }, function(error, response, body) {
-            console.log(body)
             if (!error && response.statusCode == 200) {
                 let data = JSON.parse(body)
                 const { errcode, errmsg, openid } = data;

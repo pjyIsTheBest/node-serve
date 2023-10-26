@@ -74,6 +74,13 @@ module.exports = {
             ip = ip.split(',')[0];
         }
         return ip;
+    },
+    randomString: (e = 32) => {
+        let t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789",
+            a = t.length,
+            n = "";
+        for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+        return n;
     }
 
 }
