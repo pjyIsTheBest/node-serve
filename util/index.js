@@ -1,5 +1,6 @@
 //生成token
 const crypto = require("crypto");
+const stringRandom = require('string-random');
 const idiograph = 'idiograph.pjy.cool';
 module.exports = {
     createToken: (str, times) => { //接受一个字符串和一个过期时间
@@ -75,12 +76,8 @@ module.exports = {
         }
         return ip;
     },
-    randomString: (e = 32) => {
-        let t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789",
-            a = t.length,
-            n = "";
-        for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
-        return n;
+    randomString: (len = 32) => {
+        return stringRandom(len)
     }
 
 }
