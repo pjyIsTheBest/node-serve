@@ -21,6 +21,7 @@ router.get("/getCode", async(req, res) => {
                 data: {
                     url: `${ORIGIN}/static/${fileName}`,
                     certificates,
+                    test: 1
                 },
                 msg: '获取成功'
             })
