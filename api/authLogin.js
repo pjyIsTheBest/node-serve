@@ -176,12 +176,23 @@ router.post("/updateStatus", async(req, res) => {
                 })
                 return;
             }
-            redis.set(certificates, '1', 'ex', 5 * 60) //5分钟有效
-            res.json({
-                code: 200,
-                data: null,
-                msg: '操作成功'
-            })
+            if (value == '0') {
+                redis.set(certificates, '1', 'ex', 5 * 60) //5分钟有效
+                res.json({
+                    code: 200,
+                    data: { status: 1 },
+                    msg: '操作成功'
+                })
+            } else {
+                res.json({
+                    code: 200,
+                    data: {
+                        status: -1
+                    },
+                    msg: '已失效'
+                })
+            }
+
         } catch (error) {
             res.json({
                 code: 500,
