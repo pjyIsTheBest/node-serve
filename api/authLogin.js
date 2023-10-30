@@ -69,6 +69,16 @@ router.get("/getStatus", async(req, res) => {
                 })
                 return;
             }
+            if (value == '3') {
+                res.json({
+                    code: 200,
+                    data: {
+                        status: 3
+                    },
+                    msg: '已取消'
+                })
+                return;
+            }
             let info = JSON.parse(value);
             let {
                 openId,
@@ -203,35 +213,76 @@ router.post("/updateStatus", async(req, res) => {
     })
     //授权
 router.post("/login", async(req, res) => {
+        try {
+            const { certificates, code, avatr_url, nick_name } = req.body;
+
+            let value = await redis.get(certificates)
+            if (!value) {
+                res.json({
+                    code: 500,
+                    data: null,
+                    msg: '已失效'
+                })
+                return;
+            }
+            if (value == '1') {
+                let openId = await getOpenID(code)
+                redis.set(certificates, JSON.stringify({
+                        openId,
+                        avatr_url,
+                        nick_name
+                    }), 'ex', 5 * 60) //5分钟有效
+                res.json({
+                    code: 200,
+                    data: null,
+                    msg: '授权成功'
+                })
+            } else {
+                res.json({
+                    code: 500,
+                    data: null,
+                    msg: '授权失败'
+                })
+            }
+
+        } catch (error) {
+            res.json({
+                code: 500,
+                data: error,
+                msg: '获取失败'
+            })
+        }
+    })
+    //取消授权
+router.post("cancel", async(req, res) => {
     try {
-        const { certificates, code, avatr_url, nick_name } = req.body;
+        const { certificates } = req.body;
 
         let value = await redis.get(certificates)
         if (!value) {
             res.json({
-                code: 500,
-                data: null,
+                code: 200,
+                data: {
+                    status: -1
+                },
                 msg: '已失效'
             })
             return;
         }
-        if (value == '1') {
-            let openId = await getOpenID(code)
-            redis.set(certificates, JSON.stringify({
-                    openId,
-                    avatr_url,
-                    nick_name
-                }), 'ex', 5 * 60) //5分钟有效
+        if (value == '0') {
+            redis.set(certificates, '3', 'ex', 1 * 60) //5分钟有效
             res.json({
                 code: 200,
                 data: null,
-                msg: '授权成功'
+                msg: '已取消'
             })
         } else {
             res.json({
-                code: 500,
-                data: null,
-                msg: '授权失败'
+                code: 200,
+                data: {
+                    status: -1
+                },
+                msg: '已失效'
             })
         }
 
