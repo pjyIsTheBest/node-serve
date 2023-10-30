@@ -43,8 +43,8 @@ const getWxCode = async(page, scene) => {
         let data = {
             page,
             scene,
-            check_path: false,
-            env_version: "release"
+            check_path: true,
+            env_version: "trial"
         }
         let access_token = await getAccessToken();
         return new Promise((resolve, reject) => {
