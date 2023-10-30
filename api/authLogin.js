@@ -254,7 +254,7 @@ router.post("/login", async(req, res) => {
         }
     })
     //取消授权
-router.post("cancel", async(req, res) => {
+router.post("/cancel", async(req, res) => {
     try {
         const { certificates } = req.body;
 
