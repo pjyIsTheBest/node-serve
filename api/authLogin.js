@@ -100,6 +100,8 @@ router.get("/getStatus", async(req, res) => {
                         tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                         limit: 5,
                         id: user.id,
+                        name: nick_name, //用户名
+                        avatrUrl: avatr_url
                     }
                 );
                 res.json({
