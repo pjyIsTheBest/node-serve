@@ -5,6 +5,7 @@ const role = require("./role")
 const menu = require("./menu")
 const openAi = require("./openAi.js")
 const authLogin = require('./authLogin')
+const upload = require("./upload")
 module.exports = (app) => {
     app
         .use((req, res, next) => {
@@ -16,4 +17,5 @@ module.exports = (app) => {
         .use("/api/menu", menu)
         .use("/api/openAi", openAi)
         .use('/api/auth', authLogin)
+        .use("/api/upload", upload)
 }
