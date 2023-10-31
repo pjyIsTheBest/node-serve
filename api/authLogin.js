@@ -175,6 +175,7 @@ router.get("/getStatus", async(req, res) => {
     //更新授权状态
 router.post("/updateStatus", async(req, res) => {
         try {
+            const { code } = req.query;
             const { certificates } = req.body;
 
             let value = await redis.get(certificates)
@@ -189,10 +190,15 @@ router.post("/updateStatus", async(req, res) => {
                 return;
             }
             if (value == '0') {
+                let openId = await getOpenID(code)
+
+                let [user] = await query(`SELECT avatr_url FROM user WHERE openId=:openId`, {
+                    openId: openId,
+                });
                 redis.set(certificates, '1', 'ex', 5 * 60) //5分钟有效
                 res.json({
                     code: 200,
-                    data: { status: 1 },
+                    data: { status: 1, avatrUrl: user ? user.avatr_url : null },
                     msg: '操作成功'
                 })
             } else {
