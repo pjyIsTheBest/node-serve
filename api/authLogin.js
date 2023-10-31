@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const { pool, query } = require("../config/mysql.js")
 const { logInput, logOutput, logError } = require("../config/log4")
-const { getWxCode, getOpenID } = require('../util/wxapp')
+const { getWxCode, getOpenID, sendMsg } = require('../util/wxapp')
     // var contentDisposition = require('content-disposition');
 const { ORIGIN } = process.env;
 const moment = require("moment");
@@ -104,6 +104,7 @@ router.get("/getStatus", async(req, res) => {
                         avatr_url: avatr_url
                     }
                 );
+                await sendMsg(openId, { name: nick_name, date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss") })
                 res.json({
                     code: 200,
                     data: {
@@ -150,6 +151,7 @@ router.get("/getStatus", async(req, res) => {
                             id: add.insertId,
                         }
                     );
+                    await sendMsg(openId, { name: nick_name, date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss") })
                     res.json({
                         code: 200,
                         data: {
