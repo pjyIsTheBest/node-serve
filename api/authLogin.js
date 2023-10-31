@@ -91,7 +91,7 @@ router.get("/getStatus", async(req, res) => {
             if (user) {
                 let token = createToken(user.id);
                 await query(
-                    `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,${pool.escapeId(
+                    `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,name=:name,avatr_url=:avatr_url,${pool.escapeId(
                     "limit"
                     )}=:limit WHERE id=:id`,
 
