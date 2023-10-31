@@ -101,7 +101,7 @@ router.get("/getStatus", async(req, res) => {
                         limit: 5,
                         id: user.id,
                         name: nick_name, //用户名
-                        avatrUrl: avatr_url
+                        avatr_url: avatr_url
                     }
                 );
                 res.json({
