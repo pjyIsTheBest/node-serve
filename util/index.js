@@ -2,49 +2,30 @@
 const crypto = require("crypto");
 const stringRandom = require('string-random');
 const idiograph = 'idiograph.pjy.cool';
+const { redis } = require("../config/redis");
+const { encrypt, decrypt } = require("./rsa")
 module.exports = {
-    createToken: (str, times) => { //接受一个字符串和一个过期时间
-        times = times || 30 * 60 * 1000;
-        const jsonData = {
-                data: str,
-                timeout: times,
-                createAt: Date.now()
-            }
-            //格式转成base64
-        let base64Str = Buffer.from(JSON.stringify(jsonData), "utf8").toString("base64");
-        //添加签名，防篡改        
-        let hash = crypto.createHmac('sha256', idiograph);
-        hash.update(base64Str);
-        let signature = hash.digest('base64');
-        return base64Str + "." + signature;
+    createToken: async(userId, times = 30 * 60) => { //接受一个字符串和一个过期时间
+        let token = encrypt(userId)
+        await redis.set(token, userId, 'ex', times)
+        return token;
     },
-    checkToken: (token) => {
+    checkToken: async(token) => {
         if (!token) {
             return false
         }
-        let that = this;
-        let decArr = token.split(".");
-        if (decArr.length < 2) {
-            //token不合法
+        let userId = await redis.get(token);
+        if (!userId) {
             return false
         }
-        try {
-            //将第一段密文解析
-            let res = JSON.parse(Buffer.from(decArr[0], "base64").toString("utf8"));
-            //检验签名                
-            let hash = crypto.createHmac('sha256', idiograph);
-            hash.update(decArr[0]);
-            let checkSignature = hash.digest('base64');
-            //将第一段密文生成签名，与第二段比较是否一样
-            if (checkSignature != decArr[1]) {
-                return false
-            }
-            //签名校验通过返回解密后的数据
-            return res
-        } catch (error) {
+        if (userId != decrypt(token)) {
             return false
         }
+        return userId;
 
+    },
+    updateToken(token, userId, times = 30 * 60) {
+        redis.set(token, userId, 'ex', times)
     },
     md5: function(str) { //字符串加密
         let md5 = crypto.createHash('md5');

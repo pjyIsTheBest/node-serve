@@ -91,13 +91,11 @@ router.get("/getStatus", async(req, res) => {
             if (user) {
                 let token = createToken(user.id);
                 await query(
-                    `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,name=:name,avatr_url=:avatr_url,${pool.escapeId(
+                    `UPDATE user SET name=:name,avatr_url=:avatr_url,${pool.escapeId(
                     "limit"
                     )}=:limit WHERE id=:id`,
 
                     {
-                        token,
-                        tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                         limit: 5,
                         id: user.id,
                         name: nick_name, //用户名
@@ -137,33 +135,18 @@ router.get("/getStatus", async(req, res) => {
                         data,
                     });
                     return;
-                } else {
-                    let token = createToken(add.insertId);
-                    await query(
-                        `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,${pool.escapeId(
-                        "limit"
-                        )}=:limit WHERE id=:id`,
-
-                        {
-                            token,
-                            tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-                            limit: 5,
-                            id: add.insertId,
-                        }
-                    );
-                    await sendMsg(openId, { name: nick_name, date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss") })
-                    res.json({
-                        code: 200,
-                        data: {
-                            status: 2,
-                            token: token,
-                            name: nick_name, //用户名
-                            avatrUrl: avatr_url
-                        },
-                        msg: "登录成功，欢迎您！",
-                    });
                 }
-
+                await sendMsg(openId, { name: nick_name, date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss") })
+                res.json({
+                    code: 200,
+                    data: {
+                        status: 2,
+                        token: token,
+                        name: nick_name, //用户名
+                        avatrUrl: avatr_url
+                    },
+                    msg: "登录成功，欢迎您！",
+                });
             }
 
         } catch (error) {

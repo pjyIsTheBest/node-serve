@@ -57,7 +57,7 @@ const logInput = (data) => {
     logger.info(data);
 };
 const logOutput = (data) => {
-    let logger = log4js.getLogger("sql");
+    let logger = log4js.getLogger("output");
     logger.info(data);
 };
 const logError = (data) => {

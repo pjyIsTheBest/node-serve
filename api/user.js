@@ -97,13 +97,7 @@ router.post("/login", async(req, res) => {
         if (user.password == md5(password)) {
             let token = createToken(user.id);
             let data = await query(
-                `UPDATE user SET token=:token,tokenUpdateTime=:tokenUpdateTime,${pool.escapeId(
-          "limit"
-        )}=:limit WHERE id=:id`,
-
-                {
-                    token,
-                    tokenUpdateTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+                `UPDATE user SET ${pool.escapeId("limit")}=:limit WHERE id=:id`, {
                     limit: 5,
                     id: user.id,
                 }
@@ -125,9 +119,7 @@ router.post("/login", async(req, res) => {
             let status = limit <= 0 ? "02" : "01";
 
             let data = await query(
-                `UPDATE user SET ${pool.escapeId(
-          "limit"
-        )}=:limit,status=:status WHERE id=:id`, { limit, status, id: user.id }
+                `UPDATE user SET ${pool.escapeId("limit")}=:limit,status=:status WHERE id=:id`, { limit, status, id: user.id }
             );
             log(data);
             res.json({
