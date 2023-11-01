@@ -137,7 +137,7 @@ const sendMsg = (openid, { name, date }) => {
                 } else {
                     logOutput(`消息推送成功，openId=${openid}`)
                 }
-                resolve(errmsg)
+                resolve(errcode)
             }
         })
     })
