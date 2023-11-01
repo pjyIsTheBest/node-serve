@@ -38,7 +38,6 @@ router.get("/getStatus", async(req, res) => {
         try {
             const { certificates } = req.query;
             let value = await redis.get(certificates)
-            console.log(value)
             if (!value) {
                 res.json({
                     code: 200,
@@ -89,7 +88,7 @@ router.get("/getStatus", async(req, res) => {
                 openId: openId,
             });
             if (user) {
-                let token = createToken(user.id);
+                let token = await createToken(user.id);
                 await query(
                     `UPDATE user SET name=:name,avatr_url=:avatr_url,${pool.escapeId(
                     "limit"
@@ -136,6 +135,7 @@ router.get("/getStatus", async(req, res) => {
                     });
                     return;
                 }
+                let token = await createToken(add.insertId);
                 await sendMsg(openId, { name: nick_name, date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss") })
                 res.json({
                     code: 200,

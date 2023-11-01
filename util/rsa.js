@@ -5,8 +5,6 @@ const key = "abcdef0123456789";
 const iv = "0123456789abcdef";
 //加密方法
 function encrypt(data) {
-    // 三个参数：加密的key、加密的iv、需要加密的数据
-
     // 创建加密对象：三个参数（加密的算法，加密的key，加密的iv）
     const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
 

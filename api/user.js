@@ -95,7 +95,7 @@ router.post("/login", async(req, res) => {
             return;
         }
         if (user.password == md5(password)) {
-            let token = createToken(user.id);
+            let token = await createToken(user.id);
             let data = await query(
                 `UPDATE user SET ${pool.escapeId("limit")}=:limit WHERE id=:id`, {
                     limit: 5,

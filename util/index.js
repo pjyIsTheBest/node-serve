@@ -6,7 +6,7 @@ const { redis } = require("../config/redis");
 const { encrypt, decrypt } = require("./rsa")
 module.exports = {
     createToken: async(userId, times = 30 * 60) => { //接受一个字符串和一个过期时间
-        let token = encrypt(userId)
+        let token = encrypt(String(userId))
         await redis.set(token, userId, 'ex', times)
         return token;
     },
