@@ -3,6 +3,7 @@ const { redis } = require("../config/redis");
 const request = require('request');
 const fs = require("fs")
 const path = require("path")
+const { logInput, logOutput, logError } = require("../config/log4")
     //获取微信接口调用凭据
 const getAccessToken = async function() {
         let cache = await redis.get("access_token");
@@ -62,6 +63,7 @@ const getWxCode = async(page, scene) => {
                 if (!error && response.statusCode == 200) {
                     const { errcode, errmsg } = body;
                     if (errcode) {
+                        logError(`生成小程序码失败，errcode=${errcode}，errmsg=${errmsg}`)
                         reject({ errcode, errmsg })
                     } else {
                         let fileName = `wxcode-${new Date().getTime()}.png`
@@ -131,10 +133,11 @@ const sendMsg = (openid, { name, date }) => {
             if (!error && response.statusCode == 200) {
                 const { errcode, errmsg } = body;
                 if (errcode != 0) {
-                    reject({ errcode, errmsg })
+                    logOutput(`消息推送失败，openId=${openid}，errcode=${errcode}，errmsg=${errmsg}`)
                 } else {
-                    resolve(errmsg)
+                    logOutput(`消息推送成功，openId=${openid}`)
                 }
+                resolve(errmsg)
             }
         })
     })
